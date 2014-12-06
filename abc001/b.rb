@@ -12,5 +12,5 @@ vv = (distance - 30)/5 + 80 if distance >= 35  && distance <= 70
 vv = 89                     if distance >  70
 
 # 出力
-puts sprintf("%02d", vv)
+puts sprintf("%02d", vv.to_i)
 
