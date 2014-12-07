@@ -1,5 +1,5 @@
 # 入力
-degree, wind_run = gets.split.map {|num| num.to_i}
+degree, wind_run = gets.split.map(&:to_i)
 
 # 初期化
 direction  = 'N'

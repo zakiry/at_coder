@@ -1,6 +1,7 @@
 # 入力
 n = gets.to_i
 datas = []
+# 1時間を60分として分に統一する
 n.times do
   start_time, end_time = gets.split('-').map(&:to_i)
   datas << [
@@ -9,7 +10,7 @@ n.times do
   ]
 end
 
-# 初期化
+# 結果初期化
 results = []
 
 # 処理
@@ -20,15 +21,19 @@ datas.each do |data|
 end
 
 # 整理する
+# 降り始めた時刻でソートする
 datas.sort!
+# 初期値
 start_time = datas.first[0]
 last_time  = datas.first[1]
 datas.each do |data|
+  # 2つの区間が継続していない
   if data[0] > last_time
     results << [start_time, last_time]
     start_time = data[0]
     last_time  = data[1]
   else
+    # 2つの区間が継続している
     last_time = [last_time, data[1]].max
   end
 end
