@@ -83,11 +83,12 @@ src = Array.new(n){[]}
 end
 src.map!{ |str| str.uniq}
 
+memo = strs.clone
 n.times do |i|
   src[i].each do |next_num|
-    hash = strs[next_num].clone
+    hash = memo[next_num].clone
     0.upto(k) do |str_len|
-      str1 = strs[i][str_len]
+      str1 = memo[i][str_len]
       next if str1.nil?
       strs[next_num].length.times do |j|
         break if str_len + j > k
@@ -96,13 +97,13 @@ n.times do |i|
         hash[str_len+j] = [hash[str_len+j], str1+str2].min
       end
     end
-    strs[next_num] = hash
+    memo[next_num] = hash
   end
 end
 
 # 出力
 ans = []
-strs.each do |str|
+memo.each do |str|
   ans << str[k] unless str[k].nil?
 end
 if ans.empty?
