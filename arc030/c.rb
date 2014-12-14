@@ -57,16 +57,16 @@ dscc
 # グラフを再構築する
 n = @group_number.max + 1
 
-claster_str = Array.new(n){[]}
+group_str = Array.new(n){[]}
 @n.times do |i|
   group_id = @group_number[i]
-  claster_str[group_id] << c[i]
+  group_str[group_id] << c[i]
 end
-claster_str.map! { |str_array| str_array.sort.join }
+group_str.map! { |str_array| str_array.sort.join }
 
 strs = []
 n.times do |i|
-  str = claster_str[i]
+  str = group_str[i]
   hash = { 0 => '' }
   str.length.times do |len|
     break if len >= k
@@ -83,12 +83,12 @@ src = Array.new(n){[]}
 end
 src.map!{ |str| str.uniq}
 
-memo = strs.clone
+result = strs.clone
 n.times do |i|
   src[i].each do |next_num|
-    hash = memo[next_num].clone
+    hash = result[next_num].clone
     0.upto(k) do |str_len|
-      str1 = memo[i][str_len]
+      str1 = result[i][str_len]
       next if str1.nil?
       strs[next_num].length.times do |j|
         break if str_len + j > k
@@ -97,13 +97,13 @@ n.times do |i|
         hash[str_len+j] = [hash[str_len+j], str1+str2].min
       end
     end
-    memo[next_num] = hash
+    result[next_num] = hash
   end
 end
 
 # 出力
 ans = []
-memo.each do |str|
+result.each do |str|
   ans << str[k] unless str[k].nil?
 end
 if ans.empty?
