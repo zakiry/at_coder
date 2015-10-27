@@ -17,26 +17,20 @@ func main() {
 	}
 
 	count := 0
-	for i := 0; i < len(rooms); i++ {
+	for i := 1; i < len(rooms); i++ {
 		count += rooms[i]
-		rooms[i] = count
-	}
-
-	flags := make([]bool, m)
-	for i := 0; i < len(flags); i++ {
-		flags[i] = true
-	}
-	for i := 0; i < m; i++ {
-		for j := section[i][0]; j <= section[i][1]; j++ {
-			if rooms[j] <= 1 {
-				flags[i] = false
-			}
+		if count <= 1 {
+			rooms[i] = rooms[i-1] + 1
+		} else {
+			rooms[i] = rooms[i-1]
 		}
 	}
 
 	ans_count := 0
-	for i := 0; i < len(flags); i++ {
-		if flags[i] {
+	flags := make([]bool, m)
+	for i := 0; i < m; i++ {
+		if rooms[section[i][1]]-rooms[section[i][0]-1] == 0 {
+			flags[i] = true
 			ans_count++
 		}
 	}
