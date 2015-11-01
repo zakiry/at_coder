@@ -1,16 +1,31 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+)
+
+var scanner = bufio.NewScanner(os.Stdin)
+
+func nextInt() int {
+	scanner.Scan()
+	i, _ := strconv.Atoi(scanner.Text())
+	return i
+}
 
 func main() {
-	var n, m int
-	section := make([][2]int, 0, m)
-	fmt.Scanf("%d %d", &n, &m)
+	scanner.Split(bufio.ScanWords)
+	n := nextInt()
+	m := nextInt()
 
+	section := make([][2]int, 0, m)
 	rooms := make([]int, n+2)
+
 	for i := 0; i < m; i++ {
-		var s, t int
-		fmt.Scanf("%d %d", &s, &t)
+		s := nextInt()
+		t := nextInt()
 		section = append(section, [2]int{s, t})
 		rooms[s]++
 		rooms[t+1]--
