@@ -5,19 +5,25 @@ n.times do
 end
 
 dp = []
-dp << c[0]
 
-(1..n-1).each do |i|
-  if dp[-1] < c[i]
-    dp << c[i]
-    next
+def search(num, list)
+  return 0 if list.length==0 || num<list[0]
+  return list.length if num>list[-1]
+
+  half_list = []
+  offset=0
+  if num < list[list.length/2]
+    half_list = list[0..list.length/2-1]
+  else
+    half_list = list[list.length/2..-1]
+    offset = list.length/2
   end
-  (i+1).times do |j|
-    if dp[j].nil? || dp[j] > c[i]
-      dp[j] = c[i]
-      break
-    end
-  end
+  offset + search(num, half_list)
+end
+
+n.times do |i|
+  index = search(c[i], dp)
+  dp[index] = c[i]
 end
 
 puts n-dp.length
