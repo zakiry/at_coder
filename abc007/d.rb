@@ -1,15 +1,23 @@
 a, b = gets.chomp.split(' ').map{|num| num.to_i}
+N = 20
+
+@memo = []
+N.times do |i|
+  @memo[i] = (10**i)-(8**i)
+end
 
 def count49(num, rank)
   return 0 if rank<0
 
-  mln = num/(10**rank)
+  rank_num = (10**rank)
+  mln = num / rank_num
+  leave_nums = num % rank_num
   if mln==4 || mln==9
-    return num % (10**rank) + count49((10**rank)*mln-1, rank) + 1
+    return leave_nums  + count49(mln*rank_num-1, rank) + 1
   elsif mln<4
-    return mln*(10**rank - 8**rank)  + count49(num % (10**rank), rank-1)
+    return mln*@memo[rank] + count49(leave_nums, rank-1)
   else
-    return (mln-1)*(10**rank - 8**rank)  + count49(num % (10**rank), rank-1) + (10**rank)
+    return (mln-1)*@memo[rank]  + count49(leave_nums, rank-1) + rank_num
   end
 end
 
