@@ -1,66 +1,30 @@
-require 'thread'
+@dp = {}
 
 w, h = gets.chomp.split(' ').map{|num| num.to_i}
 n = gets.chomp.to_i
-
-UP, RIGHT, DOWN, LEFT = [0, 1], [1, 0], [0, -1], [-1, 0]
-
-points = []
+@points = []
 n.times do
   x, y = gets.chomp.split(' ').map{|num| num.to_i}
-  points << [x, y]
+  @points << [x, y]
 end
 
-p_list = points.permutation(points.length)
-q = Queue.new
+def solve(xo, yo, w, h)
+  return 0 if xo>w || yo>h
+  return @dp[[xo,yo,w,h].join('_')] unless @dp[[xo,yo,w,h].join('_')].nil?
+  ans = 0
+  @points.each do |point|
+    x, y = point.first, point.last
+    next if x<xo || x>w || y<yo || y>h
 
-def get_initial_golds(w, h)
-  golds = Array.new(w+2){Array.new(h+2){true}}
-  (w+2).times do |i|
-    (h+2).times do |j|
-      golds[i][j] = false if i==0 || j==0 || i==(w+1) || j==(h+1)
-    end
+    ans = [ans, w-xo + h-yo + 1 +
+      solve(xo, yo, x-1, y-1) + solve(xo, y+1, x-1, h) +
+      solve(x+1, yo, w, y-1) + solve(x+1, y+1, w, h)].max
   end
-  golds
+  @dp[[xo,yo,w,h].join('_')] = ans
+  ans
 end
 
-def show(golds)
-  puts '--'
-  golds.each do |line|
-    line.each do |block|
-      print 1 if block
-      print 0 unless block
-    end
-    puts
-  end
-  puts '--'
-end
+ans = solve(1, 1, w, h)
 
-results = []
-p_list.each do |m_list|
-  golds = get_initial_golds(w, h)
-  gold_count = 0
-  m_list.each do |point|
-    gold_count = gold_count + 1
-    golds[point.first][point.last] = false
-
-    q.push([point, UP])
-    q.push([point, RIGHT])
-    q.push([point, DOWN])
-    q.push([point, LEFT])
-    until q.empty?
-      pop_data = q.pop
-      c_p = pop_data.first
-      n_p = pop_data.last
-      if golds[c_p.first+n_p.first][c_p.last+n_p.last]
-        gold_count = gold_count + 1
-        golds[c_p.first+n_p.first][c_p.last+n_p.last] = false
-        q.push([[c_p.first+n_p.first, c_p.last+n_p.last], n_p])
-      end
-    end
-  end
-  results << gold_count
-end
-
-puts results.max
+puts ans
 
