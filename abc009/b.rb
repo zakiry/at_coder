@@ -5,6 +5,7 @@ n.times do
   a << gets.chomp.to_i
 end
 
-a.uniq!.sort
+a.uniq!
+a.sort!
 puts a[-2]
 
